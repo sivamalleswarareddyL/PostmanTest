@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "14fa8443-e18c-43a9-83c8-f1f69f99d7e1",
+		"name": "MM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29071784"
+	},
+	"item": [
+		{
+			"name": "Automation",
+			"item": [
+				{
+					"name": "Get Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var responseData = pm.response.json();",
+									"// var MaximumStatus = responseData.MaximumStatus;",
+									"",
+									"// if (MaximumStatus !== \"1000\") {",
+									"//     pm.collectionVariables.set(\"orderId\", responseData.data[0].OrderId);",
+									"// } else {",
+									"//     console.log(\"MaximumStatus  is 1000.\");",
+									"// }",
+									"",
+									"",
+									"var responseData = pm.response.json();",
+									"var maximumStatus = responseData.MaximumStatus;",
+									"if (maximumStatus !== \"1000\") {",
+									"    pm.collectionVariables.set(\"orderId\", responseData.data[0].OrderId);",
+									"} else {",
+									"    pm.collectionVariables.set(\"orderId\", \"\"); ",
+									"}",
+									"",
+									"",
+									"",
+									"var responseData = pm.response.json();",
+									"var Max_status = responseData.data[0].MaximumStatus;",
+									"pm.test(\"Maximum status is 1000\", function() {",
+									"    pm.expect(Max_status).to.eql(\"1000\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_admin@l2}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic b21uaWNvbXBvbmVudC4xLjAuMDpiNHM4cmdUeWc1NVhZTnVu",
+								"disabled": true
+							},
+							{
+								"key": "selectedLocation",
+								"value": "{{FacilityId}}",
+								"type": "default"
+							},
+							{
+								"key": "selectedOrganization",
+								"value": "{{L2OrganizationID}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Query\": \"OrderId = 'MM-52103902'\",\r\n    \"Size\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host}}/dcorder/api/dcorder/order/search",
+							"host": [
+								"{{app_host}}"
+							],
+							"path": [
+								"dcorder",
+								"api",
+								"dcorder",
+								"order",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExecuteWave",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_admin@l2}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic b21uaWNvbXBvbmVudC4xLjAuMDpiNHM4cmdUeWc1NVhZTnVu",
+								"disabled": true
+							},
+							{
+								"key": "selectedLocation",
+								"value": "{{FacilityId}}",
+								"type": "default"
+							},
+							{
+								"key": "selectedOrganization",
+								"value": "{{L2OrganizationID}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"PlanningStrategyId\": \"BRWKStandardOrderParcel\",\r\n        \"orderId\": \"{{orderId}}\",\r\n        \"OrderPlanningRunId\": \"\",\r\n        \"IsChase\": false,\r\n        \"Orders\": []\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host}}/dmui-facade/api/dmui-facade/dcorder/orderPlanningByOrders/executeRun",
+							"host": [
+								"{{app_host}}"
+							],
+							"path": [
+								"dmui-facade",
+								"api",
+								"dmui-facade",
+								"dcorder",
+								"orderPlanningByOrders",
+								"executeRun"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.json();",
+									"var max_status = responseData.data[0].MaximumStatus;",
+									"pm.test(\"Maximum status is 2090\", function() {",
+									"    pm.expect(max_status).to.eql(\"2090\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_admin@l2}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic b21uaWNvbXBvbmVudC4xLjAuMDpiNHM4cmdUeWc1NVhZTnVu",
+								"disabled": true
+							},
+							{
+								"key": "selectedLocation",
+								"value": "{{FacilityId}}",
+								"type": "default"
+							},
+							{
+								"key": "selectedOrganization",
+								"value": "{{L2OrganizationID}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Query\": \"OrderId = '{{orderId}}'\",\r\n    \"Size\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host}}/dcorder/api/dcorder/order/search",
+							"host": [
+								"{{app_host}}"
+							],
+							"path": [
+								"dcorder",
+								"api",
+								"dcorder",
+								"order",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "orderId",
+			"value": ""
+		}
+	]
+}
